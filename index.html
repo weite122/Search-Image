@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,41 +12,40 @@
             padding: 0;
             box-sizing: border-box;
         }
-        
+
         header {
             padding: 40px 0;
             text-align: center;
         }
-        
 
-        
         main {
             padding: 10px;
         }
-        
+
         main::after {
             display: block;
             content: '';
             clear: both;
         }
-        
+
         main>figure {
             float: left;
             padding: 5px;
             transition: all .5s;
         }
-        
+
         main>figure img {
             width: 100%;
             height: 100%;
         }
-        
-        .inputcover{
+
+        .inputcover {
             position: relative;
             max-width: 300px;
             margin: 0 auto;
         }
-        .searchPicture > .inputcover> .search {
+
+        .searchPicture>.inputcover>.search {
             position: absolute;
             left: 5px;
             top: 12px;
@@ -53,8 +53,8 @@
             height: 16px;
             fill: #bbb;
         }
-        
-        .searchPicture > .inputcover> .input {
+
+        .searchPicture>.inputcover>.input {
             min-width: 300px;
             padding-left: 24px;
             height: 40px;
@@ -65,10 +65,10 @@
             outline: none;
         }
 
-        .searchPicture> .inputcover  > #closeBox {
+        .searchPicture>.inputcover>#closeBox {
             position: absolute;
-            top:0;
-            right:0;
+            top: 0;
+            right: 0;
             width: 40px;
             height: 40px;
             line-height: 26px;
@@ -76,10 +76,11 @@
             display: none;
         }
 
-        .searchPicture> .inputcover  > #closeBox.active{
+        .searchPicture>.inputcover>#closeBox.active {
             display: block;
-        } 
-        .searchPicture> .inputcover  > #closeBox svg.close {
+        }
+
+        .searchPicture>.inputcover>#closeBox svg.close {
             position: absolute;
             right: 12px;
             top: 13px;
@@ -87,147 +88,207 @@
             height: 16px;
             fill: #bbb;
         }
-
     </style>
 </head>
+
 <body>
     <header>
         <form class="searchPicture" method="get" action="#">
             <div class="inputcover">
-              <svg class="search">
-                <use xlink:href="#icon-sousuo"></use>
-              </svg>
-              <input type="text" class="input" id="serachInput" placeholder="Enter your picture">
-              <div id="closeBox">
-                <svg class="close">
-                  <use xlink:href="#icon-delete"></use>
+                <svg class="search">
+                    <use xlink:href="#icon-sousuo"></use>
                 </svg>
-              </div>
+                <input type="text" class="input" id="serachInput" placeholder="Enter your picture">
+                <div id="closeBox">
+                    <svg class="close">
+                        <use xlink:href="#icon-delete"></use>
+                    </svg>
+                </div>
             </div>
-          </form>
+        </form>
     </header>
     <main>
     </main>
     <script src="//at.alicdn.com/t/font_384630_49bmnwfg7p17cik9.js"></script>
     <script>
 
-        let mainNode = document.querySelector('main')
-        let searchInput = document.querySelector('#serachInput')
-        let closeBox = document.getElementById('closeBox')
-        let mainNodeWidth = parseFloat(mainNode.clientWidth)-35
-        let baseHeight = 200
-        let rowList = []
-        let rowTotalWidth = 0
-        
-        
-        searchInput.oninput = throttle(function() {
-            start()
-        }, 200)
-
-        window.onresize = throttle(function() {
-            start()
-        }, 200)
-
-
-        function start() {
-            mainNodeWidth = parseFloat(mainNode.clientWidth)-20
-            mainNode.innerHTML = ''
-            rowList = []
-            rowTotalWidth = 0
-            closeBox.classList.add('active')
-            loadData(searchInput.value)
-                .then(render)
-        }
-
-        closeBox.addEventListener('click', function () {
-            searchInput.value = ''
-            closeBox.classList.remove('active')
-        })
-        loadData('beijing')
-            .then(render)
-            .catch(function(err){
-                console.log(err)
-            })
-
-        function throttle(fn, delay) {
-            var timer = null
-            return function() {
-                var context = this
-                clearTimeout(timer)
-                timer = setTimeout(function() {
-                    fn.apply(context, arguments);
-                }, delay)
+        class Event {
+            static on(type, handler) {
+                return document.addEventListener(type, handler)
+            }
+            static trigger(type, data) {
+                return document.dispatchEvent(new CustomEvent(type, {
+                    detail: data
+                }))
             }
         }
 
-        function render(data) {
-            data.hits.forEach(function(imgInformation) {
-                imgInformation.ratio = imgInformation.webformatWidth / imgInformation.webformatHeight
-                imgInformation.newWidth = imgInformation.ratio * baseHeight
+        // Event.on('search', e=>console.log(e.detail))
+        // Event.trigger('search', 'start to search')
 
-                if (rowTotalWidth + imgInformation.newWidth <= mainNodeWidth) {
-                    rowList.push(imgInformation)
-                    rowTotalWidth += imgInformation.newWidth
-                } else {
-                    rowHeight = (mainNodeWidth / rowTotalWidth) * baseHeight
-                    layout(rowList, rowHeight)
-                    rowList = [imgInformation]
-                    rowTotalWidth = imgInformation.newWidth
-                }
-
-            })
-            layout(rowList, baseHeight)
-
-        }
-
-        function layout(row, rowHeight) {
-            row.forEach(function(imgInformation) {
-                let figureNode = document.createElement('figure')
-                let imgNode = document.createElement('img')
-                imgNode.src = imgInformation.webformatURL
-                figureNode.appendChild(imgNode)
-                figureNode.style.height = rowHeight + 'px'
-                figureNode.style.width = rowHeight * imgInformation.ratio + 'px'
-                mainNode.appendChild(figureNode)
-            })
-
-        }
-
-
-
-        function loadData(keyword){
-            let url = '//pixabay.com/api/'
-            let data = {
-                key: '5856858-0ecb4651f10bff79efd6c1044',
-                q: keyword,
-                image_type: 'photo',
-                per_page:20
+        class searchModule {
+            constructor(){
+                this.searchInput = document.querySelector('#serachInput')
+                this.closeBox = document.getElementById('closeBox')
+                this.bind()
             }
-            return new Promise((resolve,reject)=>{
-                let xhr = new XMLHttpRequest()
-                xhr.open('GET',makeFullUrl(url,data),true)
-                xhr.send()
-                xhr.onload = function(){
-                    resolve(JSON.parse(this.response))
-                }
-                xhr.onerror = function(){
-                    reject(this.statusText)
-                }
-            })
-        }
-
-        function makeFullUrl(url,json){
-            let arr = []
-            for(let key in json) {
-                arr.push(encodeURIComponent(key) + '=' + encodeURIComponent(json[key]))
+            bind(){
+                this.searchInput.oninput = this.throttle(()=>{
+                    Event.trigger('search',this.searchInput.value)
+                    this.closeBox.classList.add('active')
+                },300)
+                this.closeBox.onclick = this.throttle(()=>{ 
+                    this.searchInput.value = ''
+                    this.closeBox.classList.remove('active')
+                },300)
+                document.body.onresize = this.throttle(()=>
+                    Event.trigger('resize'),300)
+                document.body.onscroll = this.throttle(() => {
+                    if(this.isToBottom()){
+                        Event.trigger('bottom')
+                    }
+                })
             }
-            return url + '?' + arr.join('&')
+            throttle(fn, delay){
+                let timer =null
+                return () => {
+                    clearTimeout(timer)
+                    timer = setTimeout(() => fn.bind(this)(arguments),delay)
+                }
+            }
+            isToBottom(){
+                return document.body.scrollHeight - document.body.scrollTop - document.documentElement.clientHeight < 5
+            }
+        }
+        new searchModule()
+
+        class loadModule{
+            constructor(){
+                this.page = 1
+                this.per_page =10
+                this.keyword = ''
+                this.total_hits = 0
+                this.url = '//pixabay.com/api/'
+                this.bind()
+            }
+            bind(){
+                Event.on('search', e =>{
+                    this.page = 1
+                    this.keyword = e.detail
+                    this.loadData()
+                        .then(data =>{
+                            // console.log(this)
+                            this.total_hits = data.totalHits
+                            Event.trigger('load_first',data)
+                        })
+                        .catch(err => console.log(err))
+                })
+                Event.on('bottom',e =>{
+                    if(this.loading)return
+                    if(this.page * this.per_page > this.total_hits){
+                        Event.trigger('load_over')
+                        return
+                    }
+                    this.loading = true
+                    this.loadData()
+                        .then(data => Event.trigger('load_more',data))
+                        .catch(err => console.log(err))
+                })
+            }
+            loadData(){
+                return fetch(this.fullUrl(this.url,{
+                    key: '5856858-0ecb4651f10bff79efd6c1044',
+                    q: this.keyword,
+                    image_type: 'photo',
+                    per_page: 20,
+                    page: this.page
+                }))
+                .then((res) =>{
+                    this.loading = false
+                    return res.json()
+                })
+            }
+            fullUrl(url, json){
+                let arr = []
+                for (let key in json) {
+                    arr.push(encodeURIComponent(key) + '=' + encodeURIComponent(json[key]))
+                }
+                return url + '?' + arr.join('&')
+            }
+        }
+        new loadModule()
+
+        class layoutModule {
+            constructor() {
+                this.mainNode = document.querySelector('main')
+                this.rowHeightBase = 200
+                this.rowTotalWidth = 0
+                this.rowList = []
+                this.allImgInfo = []
+                this.bind()
+                this.mainNodeWidth = parseFloat(getComputedStyle(this.mainNode).width) - 35
+            }
+            bind() {
+                Event.on('load_first', e => {
+                    this.mainNode.innerHTML = ''
+                    this.allImgInfo = [...e.detail.hits]
+                    this.render(e.detail.hits)
+                })
+
+                Event.on('load_more', e => {
+                   this.allImgInfo.push(...e.detail.hits)
+                  this.render(e.detail.hits)
+                })
+
+                Event.on('load_over', e => {
+                  this.layout(this.rowList, this.rowHeightBase)
+                  this.rowList = []
+                  this.rowTotalWidth = 0
+                })
+
+                Event.on('resize', e => {
+                  this.mainNode.innerHTML = ''
+                  this.rowList = []
+                  this.rowTotalWidth = 0
+                  this.render(this.allImgInfo)
+                  this.mainNodeWidth = parseFloat(getComputedStyle(this.mainNode).width) - 20
+                })
+            }
+            render(data) {
+              if(!data) return
+              data.forEach(imgInfo => {
+                  imgInfo.ratio = imgInfo.webformatWidth / imgInfo.webformatHeight
+                  imgInfo.imgWidthAfter = imgInfo.ratio * this.rowHeightBase
+                  if (this.rowTotalWidth + imgInfo.imgWidthAfter <= this.mainNodeWidth) {
+                      this.rowList.push(imgInfo)
+                      this.rowTotalWidth += imgInfo.imgWidthAfter
+                  } else {
+                      let rowHeight = (this.mainNodeWidth / this.rowTotalWidth) * this.rowHeightBase
+                      this.layout(this.rowList, rowHeight)
+                      this.rowList = [imgInfo]
+                      this.rowTotalWidth = imgInfo.imgWidthAfter
+                  }
+
+              })
+          }
+
+          layout(row, rowHeight) {
+              row.forEach(imgInfo => {
+                  var figureNode = document.createElement('figure')
+                  var imgNode = document.createElement('img')
+                  imgNode.src = imgInfo.webformatURL
+                  figureNode.appendChild(imgNode)
+                  figureNode.style.height = rowHeight + 'px'
+                  figureNode.style.width = rowHeight * imgInfo.ratio + 'px'
+                  this.mainNode.appendChild(figureNode)
+              })
+
+          }
         }
 
-        function isToBottom(){
-          return document.body.scrollHeight- document.body.scrollTop - document.documentElement.clientHeight < 5
-        }
+        new layoutModule()
 
     </script>
 </body>
-</html>  
+
+</html>
