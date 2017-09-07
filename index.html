@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>SerachImage</title>
+    <title>SearchImage</title>
     <style>
         * {
             margin: 0;
@@ -60,7 +60,7 @@
 
         let mainNode = document.querySelector('main')
         var searchInput = document.querySelector('#serachInput')
-        let mainNodeWidth = parseFloat(getComputedStyle(mainNode).width)
+        let mainNodeWidth = parseFloat(mainNode.clientWidth)-35
         let baseHeight = 200
         let rowList = []
         let rowTotalWidth = 0
@@ -75,7 +75,7 @@
         }, 200)
 
         function start() {
-            mainNodeWidth = parseFloat(getComputedStyle(mainNode).width)
+            mainNodeWidth = parseFloat(mainNode.clientWidth)-20
             mainNode.innerHTML = ''
             rowList = []
             rowTotalWidth = 0
@@ -112,7 +112,6 @@
                     rowList.push(imgInformation)
                     rowTotalWidth += imgInformation.newWidth
                 } else {
-                    mainNodeWidth = parseFloat(getComputedStyle(mainNode).width)
                     rowHeight = (mainNodeWidth / rowTotalWidth) * baseHeight
                     layout(rowList, rowHeight)
                     rowList = [imgInformation]
@@ -130,9 +129,8 @@
                 let imgNode = document.createElement('img')
                 imgNode.src = imgInformation.webformatURL
                 figureNode.appendChild(imgNode)
-                console.log(mainNodeWidth)
-                // console.log('-------')
-                // console.log(rowTotalWidth)
+                console.log(mainNodeWidth,rowTotalWidth)
+                console.log('-------')
                 figureNode.style.height = rowHeight + 'px'
                 figureNode.style.width = rowHeight * imgInformation.ratio + 'px'
                 mainNode.appendChild(figureNode)
