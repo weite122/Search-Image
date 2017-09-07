@@ -17,11 +17,7 @@
             text-align: center;
         }
         
-        header input {
-            width: 220px;
-            padding: 5px;
-            outline: none;
-        }
+
         
         main {
             padding: 10px;
@@ -43,23 +39,81 @@
             width: 100%;
             height: 100%;
         }
+        
+        .inputcover{
+            position: relative;
+            max-width: 300px;
+            margin: 0 auto;
+        }
+        .searchPicture > .inputcover> .search {
+            position: absolute;
+            left: 5px;
+            top: 12px;
+            width: 16px;
+            height: 16px;
+            fill: #bbb;
+        }
+        
+        .searchPicture > .inputcover> .input {
+            min-width: 300px;
+            padding-left: 24px;
+            height: 40px;
+            line-height: 40px;
+            color: #333;
+            border: 1px solid #bbb;
+            border-radius: 3px;
+            outline: none;
+        }
+
+        .searchPicture> .inputcover  > #closeBox {
+            position: absolute;
+            top:0;
+            right:0;
+            width: 40px;
+            height: 40px;
+            line-height: 26px;
+            text-align: center;
+            display: none;
+        }
+
+        .searchPicture> .inputcover  > #closeBox.active{
+            display: block;
+        } 
+        .searchPicture> .inputcover  > #closeBox svg.close {
+            position: absolute;
+            right: 12px;
+            top: 13px;
+            width: 16px;
+            height: 16px;
+            fill: #bbb;
+        }
+
     </style>
 </head>
 <body>
     <header>
-        <input id="serachInput" placeholder="Enter picture name" type="text">
+        <form class="searchPicture" method="get" action="#">
+            <div class="inputcover">
+              <svg class="search">
+                <use xlink:href="#icon-sousuo"></use>
+              </svg>
+              <input type="text" class="input" id="serachInput" placeholder="Enter your picture">
+              <div id="closeBox">
+                <svg class="close">
+                  <use xlink:href="#icon-delete"></use>
+                </svg>
+              </div>
+            </div>
+          </form>
     </header>
     <main>
-        <!-- <figure>
-            <img src="https://cdn.pixabay.com/photo/2015/03/12/17/57/buddha-670573_150.jpg" alt="">
-        </figure> -->
     </main>
-
+    <script src="//at.alicdn.com/t/font_384630_49bmnwfg7p17cik9.js"></script>
     <script>
 
-
         let mainNode = document.querySelector('main')
-        var searchInput = document.querySelector('#serachInput')
+        let searchInput = document.querySelector('#serachInput')
+        let closeBox = document.getElementById('closeBox')
         let mainNodeWidth = parseFloat(mainNode.clientWidth)-35
         let baseHeight = 200
         let rowList = []
@@ -74,15 +128,21 @@
             start()
         }, 200)
 
+
         function start() {
             mainNodeWidth = parseFloat(mainNode.clientWidth)-20
             mainNode.innerHTML = ''
             rowList = []
             rowTotalWidth = 0
+            closeBox.classList.add('active')
             loadData(searchInput.value)
                 .then(render)
         }
 
+        closeBox.addEventListener('click', function () {
+            searchInput.value = ''
+            closeBox.classList.remove('active')
+        })
         loadData('beijing')
             .then(render)
             .catch(function(err){
@@ -101,9 +161,6 @@
         }
 
         function render(data) {
-            // console.log(data.hits)
-            total = data.total
-
             data.hits.forEach(function(imgInformation) {
                 imgInformation.ratio = imgInformation.webformatWidth / imgInformation.webformatHeight
                 imgInformation.newWidth = imgInformation.ratio * baseHeight
@@ -129,8 +186,6 @@
                 let imgNode = document.createElement('img')
                 imgNode.src = imgInformation.webformatURL
                 figureNode.appendChild(imgNode)
-                console.log(mainNodeWidth,rowTotalWidth)
-                console.log('-------')
                 figureNode.style.height = rowHeight + 'px'
                 figureNode.style.width = rowHeight * imgInformation.ratio + 'px'
                 mainNode.appendChild(figureNode)
@@ -150,7 +205,6 @@
             }
             return new Promise((resolve,reject)=>{
                 let xhr = new XMLHttpRequest()
-                // console.log(makeFullUrl(url,data))
                 xhr.open('GET',makeFullUrl(url,data),true)
                 xhr.send()
                 xhr.onload = function(){
