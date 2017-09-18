@@ -12,7 +12,17 @@
             padding: 0;
             box-sizing: border-box;
         }
-
+        
+        #declaration{
+            margin: 5px;
+            color: #777;
+            font-size: 14px;
+        }
+        #declaration>a{
+            text-decoration: none;
+            color: #599;
+            font-style: italic;
+        }
         header {
             padding: 40px 0;
             text-align: center;
@@ -88,10 +98,18 @@
             height: 16px;
             fill: #bbb;
         }
+        .goTop {
+            position: fixed;
+            bottom: 2em;
+            right: 2em;
+            background: darkgray;
+            padding: .5em;
+        }
     </style>
 </head>
 
 <body>
+    <p id="declaration">本页面所有图片均来自 <a href="https://pixabay.com/" target="_blank">pixabay.com</a>，搜索英文关键词会得到更好的搜索结果</p>
     <header>
         <form class="searchPicture" method="get" action="#">
             <div class="inputcover">
@@ -109,6 +127,7 @@
     </header>
     <main>
     </main>
+    <!-- <div class="goTop">回到顶部</div> -->
     <script src="//at.alicdn.com/t/font_384630_49bmnwfg7p17cik9.js"></script>
     <script>
 
@@ -123,13 +142,14 @@
             }
         }
 
-        // Event.on('search', e=>console.log(e.detail))
-        // Event.trigger('search', 'start to search')
+        Event.on('search', e=>console.log(e.detail))
+        Event.trigger('search', 'start to search')
 
         class searchModule {
             constructor(){
                 this.searchInput = document.querySelector('#serachInput')
                 this.closeBox = document.getElementById('closeBox')
+                this.goTop = document.getElementById('goTop')
                 this.bind()
             }
             bind(){
@@ -194,6 +214,11 @@
                         .then(data => Event.trigger('load_more',data))
                         .catch(err => console.log(err))
                 })
+                // Event.on('gotop',e=>{
+                //     this.e.target.on('click',function(){
+                //         $(window).scrollTop(0)
+                //     })
+                // })
             }
             loadData(){
                 return fetch(this.fullUrl(this.url,{
@@ -215,6 +240,9 @@
                 }
                 return url + '?' + arr.join('&')
             }
+            // goTop(){
+
+            // }
         }
         new loadModule()
 
