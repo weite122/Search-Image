@@ -382,10 +382,14 @@
 
           layout(row, rowHeight) {
               row.forEach(imgInfo => {
-                  var figureNode = document.createElement('figure')
-                  var imgNode = document.createElement('img')
+                  let figureNode = document.createElement('figure')
+                  let imgNode = document.createElement('img')
+                  let imgUrlNode = document.createElement('a')
+                  imgUrlNode.href = imgInfo.pageURL
+                  imgUrlNode.target="_blank"
                   imgNode.src = imgInfo.webformatURL
-                  figureNode.appendChild(imgNode)
+                  imgUrlNode.appendChild(imgNode)
+                  figureNode.appendChild(imgUrlNode)
                   figureNode.style.height = rowHeight + 'px'
                   figureNode.style.width = rowHeight * imgInfo.ratio + 'px'
                   this.mainNode.appendChild(figureNode)
