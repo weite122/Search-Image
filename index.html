@@ -147,7 +147,6 @@
             padding: 5px 8px;
             width: 90px;
             opacity: 0;
-            /* visibility: hidden; */
         }
         .description>li>p::after{
             content: '';
@@ -163,7 +162,6 @@
         }
         .description>li:hover>p{
             opacity: 1;
-            /* visibility: visible; */
             transform: translate(0);
             transition: all 1s;
         }
@@ -298,6 +296,7 @@
                         Event.trigger('load_over')
                         return
                     }
+                    this.page++
                     this.loading = true
                     this.loadData()
                         .then(data => Event.trigger('load_more',data))
@@ -309,7 +308,7 @@
                     key: '5856858-0ecb4651f10bff79efd6c1044',
                     q: this.keyword,
                     image_type: 'photo',
-                    per_page: 20,
+                    per_page: 15,
                     page: this.page
                 }))
                 .then((res) =>{
