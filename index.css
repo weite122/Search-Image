@@ -1,173 +1,144 @@
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-ul,li{
-    list-style: none;
-}
-a{
-    text-decoration: none;
-}
-#declaration{
-    margin: 5px;
-    color: #777;
-    font-size: 14px;
-}
-#declaration>a{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box; }
+
+ul, li {
+  list-style: none; }
+
+a {
+  text-decoration: none; }
+
+#declaration {
+  margin: 5px;
+  color: #777;
+  font-size: 14px; }
+  #declaration > a {
     text-decoration: none;
     color: #599;
-    font-style: italic;
-}
+    font-style: italic; }
+
 header {
-    padding: 40px 0;
-    text-align: center;
-}
+  padding: 40px 0;
+  text-align: center; }
 
 main {
-    padding: 10px;
-}
-
-main::after {
+  padding: 10px; }
+  main::after {
     display: block;
     content: '';
-    clear: both;
-}
-
-main>figure {
+    clear: both; }
+  main > figure {
     position: relative;
     float: left;
     padding: 3px;
     transition: all .5s;
-    cursor: pointer;
-}
+    cursor: pointer; }
+    main > figure img {
+      width: 100%;
+      height: 100%; }
+    main > figure > a > div {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: #222;
+      opacity: 0; }
+      main > figure > a > div:hover {
+        opacity: .7; }
 
-main>figure img {
-    width: 100%;
-    height: 100%;
-}
-
-
-main>figure>a>div{
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: #222;
-    opacity: 0;
-}
-main>figure>a>div:hover{
-    opacity: .7;
-}
 .inputcover {
-    position: relative;
-    max-width: 300px;
-    margin: 0 auto;
-}
+  position: relative;
+  max-width: 300px;
+  margin: 0 auto; }
 
-.searchPicture>.inputcover>.search {
-    position: absolute;
-    left: 5px;
-    top: 12px;
-    width: 16px;
-    height: 16px;
-    fill: #bbb;
-}
-
-.searchPicture>.inputcover>.input {
-    min-width: 300px;
-    padding-left: 24px;
-    height: 40px;
-    line-height: 40px;
-    color: #333;
-    border: 1px solid #bbb;
-    border-radius: 3px;
-    outline: none;
-}
-
-.searchPicture>.inputcover>#closeBox {
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 40px;
-    height: 40px;
-    line-height: 26px;
-    text-align: center;
-    display: none;
-}
-
-.searchPicture>.inputcover>#closeBox.active {
-    display: block;
-}
-
-.searchPicture>.inputcover>#closeBox svg.close {
+.searchPicture > .inputcover > .search {
+  position: absolute;
+  left: 5px;
+  top: 12px;
+  width: 16px;
+  height: 16px;
+  fill: #bbb; }
+.searchPicture > .inputcover > .input {
+  min-width: 300px;
+  padding-left: 24px;
+  height: 40px;
+  line-height: 40px;
+  color: #333;
+  border: 1px solid #bbb;
+  border-radius: 3px;
+  outline: none; }
+.searchPicture > .inputcover > #closeBox {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 40px;
+  height: 40px;
+  line-height: 26px;
+  text-align: center;
+  display: none; }
+  .searchPicture > .inputcover > #closeBox.active {
+    display: block; }
+  .searchPicture > .inputcover > #closeBox svg.close {
     position: absolute;
     right: 12px;
     top: 13px;
     width: 16px;
     height: 16px;
     fill: #bbb;
-}
-.description{
-    position: fixed;
-    bottom: 2em;
-    right: 2em;
-}
-.description> li {
+    left: 0px; }
+
+.description {
+  position: fixed;
+  bottom: 2em;
+  right: 2em; }
+  .description > li {
     position: relative;
     padding: 1em;
     background-color: #fff;
     text-align: center;
     border: 1px solid #ccc;
-    border-bottom: none;
-}
-.description>li:last-child{
-    border-bottom: 1px solid #ccc;
-}
-.description > li:hover{
-    background-color: rgb(77,144,254);
-    border-color: rgb(77,144,254);
-}
-.description > li:hover svg{
-    fill: #fff;
-}
-.description > li > a{
-    width: 100%;
-    height: 100%;
-    display: block;
-}
-.description> li > a> svg{
-    width: 36px;
-    height: 36px;
-    fill: #292424;
-}
+    border-bottom: none; }
+    .description > li:last-child {
+      border-bottom: 1px solid #ccc; }
+    .description > li:hover {
+      background-color: #4d90fe;
+      border-color: #4d90fe; }
+      .description > li:hover svg {
+        fill: #fff; }
+      .description > li:hover > p {
+        opacity: 1;
+        transform: translate(0);
+        transition: all 1s; }
+    .description > li > a {
+      width: 100%;
+      height: 100%;
+      display: block; }
+      .description > li > a > svg {
+        width: 36px;
+        height: 36px;
+        fill: #292424; }
+    .description > li > p {
+      position: absolute;
+      top: 12px;
+      right: 110%;
+      background: #fff;
+      color: #4d90fe;
+      border: 1px solid #4d90fe;
+      padding: 5px 8px;
+      width: 90px;
+      opacity: 0; }
+      .description > li > p::after {
+        content: '';
+        width: 7px;
+        height: 7px;
+        position: absolute;
+        top: 5px;
+        right: -5px;
+        border-top: 1px solid #4d90fe;
+        border-right: 1px solid #4d90fe;
+        background-color: #fff;
+        transform: rotate(45deg); }
 
-.description>li>p{
-    position: absolute;
-    top: 12px;
-    right: 110%;
-    background: #fff;
-    color: rgb(77,144,254);
-    border: 1px solid rgb(77,144,254);
-    padding: 5px 8px;
-    width: 90px;
-    opacity: 0;
-}
-.description>li>p::after{
-    content: '';
-    width: 7px;
-    height: 7px;
-    position: absolute;
-    top: 5px;
-    right: -5px;
-    border-top: 1px solid rgb(77,144,254);
-    border-right: 1px solid rgb(77,144,254);
-    background-color: #fff;
-    transform: rotate(45deg);
-}
-.description>li:hover>p{
-    opacity: 1;
-    transform: translate(0);
-    transition: all 1s;
-}
+/*# sourceMappingURL=index.css.map */
